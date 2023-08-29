@@ -98,3 +98,17 @@ Este generador toma el código de MiInfeccion.vba y lo coloca como macro en un n
 ## Warning!
 
 Como este script de creación hace un cerrado forzoso de la aplicación de Excel, se recomienda no estar usando la aplicación en otro tipo de trabajo, porque podrías perder toda la información.
+
+# Vacuna
+
+## Requerimientos
+
+Para poder ejecutar la vacuna solo se necesita usar el mismo equipo infectado y una terminal.
+
+## Uso
+
+Para usar el código de vacuna basta ejecutar el archivo con algo como lo siguiente:
+
+`powershell.exe -ep bypass -File "MiVacuna.ps1"`
+
+Con esto se recuperan todos los archivos que podrían estar infectados del equipo, de las miemas carpetas: "Desktop", "Documents", "Downlaods"

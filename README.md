@@ -10,7 +10,6 @@ Para lograr este objetivo proponemos 2 modelos de infección:
 - A través de acceso directo (archivo .lnk)
 - A través de archivo Excel con Macro (archivo .xlsm)
 
-
 # Acceso Directo (.LNK)
 
 ## Requerimientos
@@ -29,16 +28,19 @@ Por lo anterior necesitamos usar la librería [pylnk3] (https://github.com/stray
 
 Para usar el código basta utilizar el archivo con algo como lo siguiente:
 
-`powershell.exe -ep bypass -File "crear LNK de infeccion.ps1`
+`powershell.exe -ep bypass -File "crear LNK de infeccion.ps1"`
 
 ## Explicación de Archivos
 
 ### MiInfeccion.ps1
-El funcionamiento del código es tomar el powershell escrito en "MiInfeccion.ps1" y agregarlo como código a ejecutar por el acceso directo. Este archivo es el que tiene toda la logica del cambio de nombre, y cualquier cambio que se requiera de esa lógica, se puede realizar en ese archivo.
+
+Este es el archivo principal de "infección" del equipo, está en la carpeta "payloads". Este archivo es el que tiene toda la logica del cambio de nombre, y cualquier cambio que se requiera de esa lógica, se puede realizar en ese archivo.
 
 Los puntos que se recomienda editar son los siguientes:
 - La extensión final que deja, por defecto es ".palquelee"
 - Las extensiones de archivos que va a renombrar, por defecto son: ".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif"
+
+A parte de esto, lo único que hace es un loop por las carpetas "Documents", "Desktop" y "Downloads" para "cifrar" todo los archivos con las extensiones definidas anteriormente.
 
 ### crear LNK de infeccion.ps1
 
@@ -60,4 +62,39 @@ Las etapas en la ejecución del archivo sería algo como:
 
 # Archivo Excel con Macro
 
-TODO
+## Requerimientos
+
+Para poder generar el archivo con macro necesitas una instancia de Excel en el equipo, porque el script de creación abre una instancia de Excel para poder crear el archivo malicioso.
+
+## Uso
+
+Para usar el código basta utilizar el archivo con algo como lo siguiente:
+
+`powershell.exe -ep bypass -File "crear XLS de infeccion.ps1"`
+
+## Explicación de Archivos
+
+### MiInfeccion.vba
+
+Este es el archivo principal de "infección" del equipo, está en la carpeta "payloads". Este archivo es el que tiene toda la lógica que va a usar Excel para cifrar los archivos, la lógica de infección ocurre cuando se cierra el archivo ("Workbook_BeforeClose").
+
+El archivo final tiene definidas varias funciones internamente:
+- ChangeFiles: este metodo es el que renombra los archivos y les cambia el nombre por su nombre original + extensión "palquelee".
+- SetImage: este metodo es el que descarga (del mismo Excel) la imagen de fondo de pantalla y la configura como tal.
+- Pacman: este método es el que dibuja un pacman de color aleatorio en las celdas.
+
+Las demás definiciones del archivo son principalmente de apoyo para poder hacer la codificación más legible
+
+### bg.jpg
+
+Esta va a ser la imagen que se va a agregar al archivo Excel en la posicion 3000,3000 y finalmente va a quedar de fondo de pantalla. Se puede cambiar por cualquier imagen bmp, jpg, png (otros formatos no han sido probados).
+
+### crear XLS de infeccion.ps1
+
+El archivo "crear XLS de infeccion.ps1" es solamente el builder, el que termina generando el archivo .xlsm (Excel con macros) final para el despliegue. 
+
+Este generador toma el código de MiInfeccion.vba y lo coloca como macro en un nuevo archivo .xlsm que crea con la instancia de la aplicación Excel recién abierta. Tiene que forzar el cerrado de la aplicación de Excel para que no se "auto-infecte".
+
+## Warning!
+
+Como este script de creación hace un cerrado forzoso de la aplicación de Excel, se recomienda no estar usando la aplicación en otro tipo de trabajo, porque podrías perder toda la información.

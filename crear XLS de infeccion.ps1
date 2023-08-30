@@ -8,7 +8,7 @@ if((Test-Path $output) -eq $false){New-Item -ItemType Directory $output}
 if((Test-Path $payloads) -eq $false){New-Item -ItemType Directory $payloads}
 
 $file_output = "Planilla de vulnerabilidades.xlsm" # Nombre del archivo final
-$file_code = "MiInfeccion.vbs" # Nombre del archivo con código VBA para el Excel
+$file_code = "MiInfeccion.vba" # Nombre del archivo con código VBA para el Excel
 $file_image = "bg.jpg" # Nombre de la imagen a embeber
 
 # Abrimos una instancia de la aplicación Excel.

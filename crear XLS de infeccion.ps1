@@ -1,8 +1,8 @@
 ﻿$base = $PSScriptRoot+"\";
 if($base -eq "\"){$base = ".\"}
 
-$output = $base + "output\";
-$payloads = $base + "payloads\";
+$output = ($base + "output\" | Resolve-Path).Path;
+$payloads = ($base + "payloads\" | Resolve-Path).Path;
 
 if((Test-Path $output) -eq $false){New-Item -ItemType Directory $output}
 if((Test-Path $payloads) -eq $false){New-Item -ItemType Directory $payloads}

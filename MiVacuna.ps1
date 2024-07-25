@@ -1,12 +1,17 @@
-﻿$extension = @(".palquelee");
-Get-ChildItem -Path (Get-ChildItem -Path Env:\USERPROFILE).value | ForEach-Object {
-    if($_.Name -eq "Downloads" -or $_.Name -eq "Desktop" -or $_.Name -eq "Documents" -or $_.Name -eq "Videos"){
-        Get-ChildItem -Recurse -Path $_.FullName | ForEach-Object {
-            if($extension.Contains($_.Extension)){
-                $name = $_.BaseName;
-                if($name.Length % 4 -eq 2){$name+="=="}
-                elseif($name.Length % 4 -eq 3){$name+="="}
-                Rename-Item -Path $_.FullName -NewName ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($name)))
+$extension = @(".palquelee");
+$user_dirs = "(Downloads|Desktop|Documents)";
+$base_dirs = @("$Env:USERPROFILE", "$Env:OneDrive");
+foreach($base in $base_dirs){
+    if([string]::IsNullOrEmpty($base)){continue}
+    Get-ChildItem -Path $base | ForEach-Object {
+        if($_.Name -match $user_dirs){
+            Get-ChildItem -Recurse -Path $_.FullName | ForEach-Object {
+                if($extension.Contains($_.Extension)){
+                    $name = $_.BaseName;
+                    if($name.Length % 4 -eq 2){$name+="=="}
+                    elseif($name.Length % 4 -eq 3){$name+="="}
+                    Rename-Item -Path $_.FullName -NewName ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($name)))
+                }
             }
         }
     }

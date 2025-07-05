@@ -1,6 +1,13 @@
+# Este codigo permite generar la limpieza de todo
+
+# VARIABLES PARA CONFIGURAR
 $extension = @(".palquelee");
 $user_dirs = "(Downloads|Desktop|Documents)";
 $base_dirs = @("$Env:USERPROFILE", "$Env:OneDrive");
+#####
+
+#####
+# Inicio de código
 foreach($base in $base_dirs){
     if([string]::IsNullOrEmpty($base)){continue}
     Get-ChildItem -Path $base | ForEach-Object {
@@ -16,3 +23,4 @@ foreach($base in $base_dirs){
         }
     }
 }
+#####

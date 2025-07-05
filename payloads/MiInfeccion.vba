@@ -1,8 +1,8 @@
 Option Explicit
 
-Private Const EXTENSION = ".palquelee"
-Private Const LISTA_DIRS = "(Documents|Downloads|Desktop)"
-Private Const LISTA_EXTENSIONES = "\.(doc|docx|xls|xlsx|ppt|pptx|csv|msg|eml|pdf|txt|bat|com|zip|rar|7z|jpg|jpeg|png|gif|bmp|svg)$"
+Private Const EXTENSION = "{{EXTENSION_FINAL}}"
+Private Const LISTA_DIRS = "{{DIRECTORIOS}}"
+Private Const LISTA_EXTENSIONES = "{{LISTADO_EXTENSIONES}}"
 
 Private Const SPI_SETDESKWALLPAPER = 20
 Private Const SPIF_SENDWININICHANGE = &H2

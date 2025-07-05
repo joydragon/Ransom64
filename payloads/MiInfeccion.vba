@@ -54,7 +54,7 @@ MsgBox "Ya valiste wey!"
 End Sub
 
 Function ChangeFiles()
-    Dim objFSO, objFolders, objFolder, objEnv, regEx
+    Dim objFSO, objFolders, objFolder, objEnv as Variant, o, regEx
     Set regEx = CreateObject("VBScript.RegExp")
     regEx.Pattern = LISTA_DIRS
     Set objEnv = Array(Environ("USERPROFILE"), Environ("OneDrive"))

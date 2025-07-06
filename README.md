@@ -42,9 +42,9 @@ Los puntos que se recomienda editar son los siguientes:
 
 A parte de esto, lo único que hace es un loop por las carpetas "Documents", "Desktop" y "Downloads" para "cifrar" todo los archivos con las extensiones definidas anteriormente.
 
-### crear LNK de infeccion.ps1
+### LNK - crear archivo de infeccion.ps1
 
-El archivo "crear LNK de infeccion.ps1" es solamente el builder, el que termina generando el archivo .lnk final para el despliegue. 
+El archivo "LNK - crear archivo de infeccion.ps1" es solamente el builder, el que termina generando el archivo .lnk final para el despliegue. 
 
 Este generador toma el código de MiInfeccion.ps1 y lo coloca como argumento (en base64) para una ejecución de Powershell con la ventana oculta en el equipo.
 
@@ -89,11 +89,17 @@ Las demás definiciones del archivo son principalmente de apoyo para poder hacer
 
 Esta va a ser la imagen que se va a agregar al archivo Excel en la posicion 3000,3000 y finalmente va a quedar de fondo de pantalla. Se puede cambiar por cualquier imagen bmp, jpg, png (otros formatos no han sido probados).
 
-### crear XLS de infeccion.ps1
+### XLS - crear archivo de infeccion.ps1
 
-El archivo "crear XLS de infeccion.ps1" es solamente el builder, el que termina generando el archivo .xlsm (Excel con macros) final para el despliegue. 
+El archivo "XLS - crear archivo de infeccion.ps1" es solamente el builder, el que termina generando el archivo .xlsm (Excel con macros) final para el despliegue. 
 
 Este generador toma el código de MiInfeccion.vba y lo coloca como macro en un nuevo archivo .xlsm que crea con la instancia de la aplicación Excel recién abierta. Tiene que forzar el cerrado de la aplicación de Excel para que no se "auto-infecte".
+
+### XLS - agregar payload a archivo.ps1
+
+El archivo "XLS - agregar payload a archivo.ps1" es otro builder, que en vez de generar un archivo totalmente nuevo, se basa en un archivo actual que se tenga (.xlsx) y le agrega la macro y deja un archivo con el mismo nombre en la carpeta de "output".
+
+Es el mismo payload de MiInfeccion.vba y lo coloca en este archivo, al igual que "XLS - crear archivo de infeccion.ps1".
 
 ## Warning!
 

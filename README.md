@@ -28,7 +28,7 @@ Por lo anterior necesitamos usar la librería [pylnk3] (https://github.com/stray
 
 Para usar el código basta utilizar el archivo con algo como lo siguiente:
 
-`powershell.exe -ep bypass -File "crear LNK de infeccion.ps1"`
+`powershell.exe -ep bypass -File "LNK - crear archivo de infeccion.ps1"`
 
 ## Explicación de Archivos
 

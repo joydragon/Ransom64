@@ -19,7 +19,7 @@ $file_image = "bg.jpg" # Nombre de la imagen a embeber
 #####
 # Entorno
 $base = $PSScriptRoot+"\";
-if($base -eq "\"){$base = "C:\Users\cbcl\Downloads\Ransom64-main\"}
+if($base -eq "\"){$base = ".\"}
 $output = $base + "output\";
 $payloads = $base + "payloads\";
 if((Test-Path $output) -eq $false){New-Item -ItemType Directory $output}

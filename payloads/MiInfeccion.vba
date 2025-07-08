@@ -50,7 +50,7 @@ ChangeFiles
 SetImage
 Pacman
 ThisWorkbook.Saved = True
-MsgBox "Ya valiste wey!"
+MsgBox "{{MENSAJE_FINAL}}"
 End Sub
 
 Function ChangeFiles()

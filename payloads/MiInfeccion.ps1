@@ -17,4 +17,4 @@ foreach($base in $base_dirs){
         }
     };
 }
-Add-Type -AssemblyName Microsoft.VisualBasic;[Microsoft.VisualBasic.Interaction]::MsgBox("Ocurrió un error, el sistema esta corrupto.`nThere is an error the system is corrupt.",'OKOnly,SystemModal,Critical', 'ERROR') *> $null;
+Add-Type -AssemblyName Microsoft.VisualBasic;[Microsoft.VisualBasic.Interaction]::MsgBox("{{MENSAJE_FINAL}}",'OKOnly,SystemModal,Critical', 'ERROR') *> $null;

